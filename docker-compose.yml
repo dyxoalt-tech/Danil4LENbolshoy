@@ -1,0 +1,26 @@
+services:
+  minecraft:
+    image: itzg/minecraft-server:latest
+    container_name: minecraft
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "25565:25565"
+    environment:
+      EULA: "TRUE"
+      # Версия сервера — должна совпадать со сборкой
+      VERSION: "${MC_VERSION:-1.20.1}"
+      # 1.20.1 + моды — стабильно на Java 17
+      JAVA_VERSION: "17"
+      # Память сервера (см. .env)
+      MEMORY: "${MEMORY:-768M}"
+      SERVER_JVM_FLAGS: "${SERVER_JVM_FLAGS}"
+      ONLINE_MODE: "TRUE"
+      MOTD: "${MOTD:-Horror server}"
+      # Зип с модами кладётся в папку pack/ (см. README)
+      MOD_FILE: "${MOD_FILE:-/pack/pack.zip}"
+      # forge | fabric | quinque — подберите под вашу сборку
+      MOD_LOADER: "${MOD_LOADER:-forge}"
+    volumes:
+      - ./data:/data
+      - ./pack:/pack
